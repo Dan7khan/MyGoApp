@@ -27,14 +27,11 @@ func main() {
 	port := os.Getenv("PORT")
 	fileServer := http.FileServer(http.Dir("./static"))
 	myRouter := mux.NewRouter().StrictSlash(true)
-	// replace http.HandleFunc with myRouter.HandleFunc
 	myRouter.Handle("/",fileServer)
 	myRouter.HandleFunc("/upload", uploadfunc)
 	myRouter.HandleFunc("/promotion/{id}", retrieveValue)
 	myRouter.HandleFunc("/uploadFile", uploadFile)
-	// finally, instead of passing in nil, we want
-	// to pass in our newly created router as the second
-	// argument
+	
 	fmt.Printf("starting the server at port:"+port)
 	log.Fatal(http.ListenAndServe(":"+port, myRouter))
 }
@@ -74,24 +71,10 @@ func uploadFile(w http.ResponseWriter, r *http.Request){
     fmt.Printf("File Size: %+v\n", handler.Size)
     fmt.Printf("MIME Header: %+v\n", handler.Header)
 
-    // // Create a temporary file within our temp-images directory that follows
-    // // a particular naming pattern
-    // tempFile, err := ioutil.TempFile("temp-images", "upload-*.png")
-    // if err != nil {
-    //     fmt.Println(err)
-    // }
-    // defer tempFile.Close()
-
-    // read all of the contents of our uploaded file into a
-    // byte array
+  
     db := open("my.db")
 	defer db.Close()
-	// file, error := os.Open(file)
-	// if error != nil {
-	// 	log.Fatal((error))
-	// 	fmt.Println("Please make sure to keep the file in the proper root folder")
-	// }
-	// defer file.Close()
+
 	var count = 1
 	reader := csv.NewReader(file)
 	for {
@@ -129,12 +112,6 @@ func retrieveValue(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// func InitializeFileInfoStorage(file FormFile) {
-	
-// }
-
-
-
 func open(file string) *bolt.DB {
 	db, err := bolt.Open(file, 0600, &bolt.Options{Timeout: 1 * time.Second})
 	if err != nil {
@@ -161,9 +138,3 @@ func get(db *bolt.DB, bucket, key string) string {
 	})
 	return s
 }
-
-// func homePage(w http.ResponseWriter, r *http.Request) {
-// 	fmt.Fprintf(w, "Welcome to the HomePage!")
-// 	fmt.Println("Endpoint Hit: homePage")
-// }
-
