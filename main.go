@@ -25,7 +25,7 @@ const b = "MyBucket1"
 func main() {
 	//port := os.Getenv("PORT")
 	port := os.Getenv("PORT")
-	fileServer := http.FileServer(http.Dir("./static"))
+	fileServer := http.FileServer(http.Dir("./static/index.html"))
 	myRouter := mux.NewRouter().StrictSlash(true)
 	myRouter.Handle("/",fileServer)
 	myRouter.HandleFunc("/upload", uploadfunc)
@@ -39,10 +39,11 @@ func main() {
 
 func uploadfunc(w http.ResponseWriter, r *http.Request){
 	fmt.Printf("entering upload func")
-	if r.URL.Path !="/upload"{
-		http.Error(w,"404 not found", http.StatusNotFound)
-		return
-	}
+	// url, err := url.Parse(str)
+	// if err != nil{
+	// 	http.Error(w,"404 not found", http.StatusNotFound)
+	// 	return
+	// }
 	p := "./static/upload.html"
 	http.ServeFile(w, r, p)
 	
