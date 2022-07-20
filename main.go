@@ -31,6 +31,7 @@ func main() {
 	myRouter.HandleFunc("/upload", uploadfunc)
 	myRouter.HandleFunc("/promotion/{id}", retrieveValue)
 	myRouter.HandleFunc("/uploadFile", uploadFile)
+	http.Handle("/", myRouter)
 	
 	fmt.Printf("starting the server at port:"+port)
 	log.Fatal(http.ListenAndServe(":"+port, myRouter))
